@@ -1,0 +1,51 @@
+/* 创建版本库*/
+mkdir repositoryname : 创建版本库（注意repositoryname用户可以随意指定）
+cd repositoryname : 打开版本库
+pwd : 命令用于显示当前目录、
+git init : 通过该命令把当前目录编程Git可管理的仓库 
+/*结束*/
+
+/* git比较重要的命令介绍 */
+git add filename : 将文件filename添加暂存区（之前保存在工作区）,可以一次性添加多个文件
+git commit -m "提交说明" : -m 后面输入的是本次提交的说明，可以输入任意内容，当然最好是有意义的，这样你就能从历史记录里方便地找到改动记录
+git status : 该命令可以让我们时刻掌握仓库当前的状态，知道哪些文件被更改了
+git diff filename: 名思义就是查看文件 filename 的 改变，显示的格式正是Unix通用的diff格式，
+git log : 该命令显示从最近到最远的提交日志
+
+Git必须知道当前版本是哪个版本，在Git中，用HEAD表示当前版本，也就是最新的提交版本ID（注意我的提交ID和你的肯定不一样），
+上一个版本就是HEAD^，上上一个版本就是HEAD^^，当然往上100个版本写100个^比较容易数不过来，所以写成HEAD~100。
+git reset --hard HEAD^ : 把当前版本回退到上一个版本
+git reset --hard 版本ID（版本号没必要写全，前几位就可以了，Git会自动去找。当然也不能只写前一两位，因为Git可能会找到多个版本号，就无法确定是哪一个了。）
+git reflog : 用来记录你的输入的每一次命令
+
+git checkout -- filename : 可以丢弃工作区的修改：
+命令git checkout -- readme.txt意思就是，把readme.txt文件在工作区的修改全部撤销，这里有两种情况：
+一种是readme.txt自修改后还没有被放到暂存区，现在，撤销修改就回到和版本库一模一样的状态；
+一种是readme.txt已经添加到暂存区后，又作了修改，现在，撤销修改就回到添加到暂存区后的状态。
+总之，就是让这个文件回到最近一次git commit或git add时的状态
+git checkout -- file命令中的--很重要，没有--，就变成了“切换到另一个分支”的命令。
+git reset HEAD file : 可以把暂存区的file修改撤销掉（unstage），重新放回工作区：
+
+git -rm : 删除版本库中某个文件（删除后需要使用 git commit 提交生效）
+git checkout -- file : 一种情况是删错了，如果版本库里还有，所以可以很轻松地把误删的文件恢复到最新版本：
+
+/** 远程仓库管理 **/
+第1步：创建SSH Key
+ssh-keygen -t rsa -C "youremail@example.com"
+
+第2步：登陆GitHub，打开“Account settings”，“SSH Keys”页面：
+然后，点“Add SSH Key”，填上任意Title，在Key文本框里粘贴id_rsa.pub文件的内容：
+
+第三步：在远程服务器上创建相应的repository用户存放本地repository中的内容
+
+第四步：将本地repository和远程repository进行关联
+git remote add origin git@github.com:michaelliao/learngit.git
+请千万注意，把上面的michaelliao替换成你自己的GitHub账户名，否则，你在本地关联的就是他人的远程库，
+关联没有问题，但是你以后推送是推不上去的，因为你的SSH Key公钥不在他人的的账户列表中。
+
+第五步：将本地库中内容推送到远程
+git push -u origin master ： 把本地库的内容推送到远程，用git push命令，实际上是把当前分支master推送到远程。
+注意只是第一次推送使用 -u参数，推送分支所有内容，以后只需要使用 git push origin master 命令即可
+
+/** 从远程库克隆 **/
+git clone git@github.com:michaelliao/gitskills.git : clone 后的内容是远程repository的地址，有多重形式如https等
